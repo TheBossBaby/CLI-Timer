@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ctime>
+#include "input.h"
 
 long int min_to_sec(long int min)
 {
@@ -12,65 +13,50 @@ long int hour_to_sec(long int h)
 	return h*60*60;
 }
 //--------------------------------------------
+const char breaker{':'};
 long int timer()
 {
-	while(true) {
-	    int short choice{4};
-	    std::cout<<"\nOption to set timer\n"
-	    		 <<"\t\n1) Minutes"
-	    		 <<"\t\n2) Hour"
-	    		 <<"\t\n3) Second\n";
-	    std::cin>>choice;
+	std::cout<<"Set the timer: format is: \'HH"<<breaker<<"MM"<<breaker<<"SS \'";
+	long int hour = Input::get_long_int(0);
+	char ch1 = Input::get_char(breaker);
+	long int minits = Input::get_long_int(0);
+	char ch2 = Input::get_char(breaker);
+	long int second = Input::get_long_int(0);
 
-	    switch(choice)
-	    {
-	    	case 1:{
-				std::cout<<"\nSet timer in minutes: ";
-				long int min{-1};
-				std::cin>>min;
-				return min_to_sec(min);
-				break;
-			}
-			case 2:{
-				std::cout<<"\nSet timer in hours: ";
-				long int hour{-1};
-				std::cin>>hour;
-				return hour_to_sec(hour);
-				break;
-			}
-			case 3:{
-				std::cout<<"Set timer in minutes: ";
-				long int second{-1};
-				std::cin>>second;
-				return second;
-				break;
-			}
-			default:
-				std::cerr<<"\nInvalid choice\nPLease choose again\n";
-		}
-	}
+	std::cout<<"The timer is set for: "<<hour<<ch1<<minits<<ch2<<second;
 
+	return hour_to_sec(hour) + min_to_sec(minits) + second;
 }
-
-long int set_alarm_time(int min, int start_time)
+//--------------------------------------------------------
+long int set_alarm_time(long int end_time, time_t start_time)
 {
-	return (min + start_time);
+	return (end_time + start_time);
 }
-
-int main()
+//--------------------------------------------------------
+bool blow_alarm(long int alarm_time)
 {
-	long int timer_duration = timer();
-	time_t start_time{time(NULL)};
-	long int alarm_time = set_alarm_time(timer_duration, start_time);
-	std::cout<<"\ntimer duration: "<<timer_duration
-			 <<"\nstart_time: "<<start_time
-			 <<"\nalarm time: "<<alarm_time<<'\n';
 	while(true) {
 		if(alarm_time == time(NULL)){
-			for(unsigned i = 0; i < 10; ++i) {
+			//play some song
+			for(unsigned i = 0; i < 10; ++i)
 				std::cout<<"\nTime up\n";
-			}
-			return 0;
+			return true;
 		}    
+	}	
+}
+//-----------------------------------------------------
+int main()
+{
+	try{
+		long int timer_duration = timer();
+		time_t start_time{time(NULL)};
+		long int alarm_time = set_alarm_time(timer_duration, start_time);
+		
+		if(blow_alarm(alarm_time)) return 0;
+	}
+	catch(Input::NoInput)
+	{
+		std::cerr<<"No Input";
+		return 1;
 	}
 }

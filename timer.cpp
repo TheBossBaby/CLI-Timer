@@ -1,12 +1,55 @@
 #include <iostream>
 #include <ctime>
 
-int timer()
+long int min_to_sec(long int min)
 {
-	std::cout<<"Set timer in minutes: ";
-	int min{-1};
-	std::cin>>min;
 	return min*60;
+}
+//-------------------------------------------
+
+long int hour_to_sec(long int h)
+{
+	return h*60*60;
+}
+//--------------------------------------------
+long int timer()
+{
+	while(true) {
+	    int short choice{4};
+	    std::cout<<"\nOption to set timer\n"
+	    		 <<"\t\n1) Minutes"
+	    		 <<"\t\n2) Hour"
+	    		 <<"\t\n3) Second\n";
+	    std::cin>>choice;
+
+	    switch(choice)
+	    {
+	    	case 1:{
+				std::cout<<"\nSet timer in minutes: ";
+				long int min{-1};
+				std::cin>>min;
+				return min_to_sec(min);
+				break;
+			}
+			case 2:{
+				std::cout<<"\nSet timer in hours: ";
+				long int hour{-1};
+				std::cin>>hour;
+				return hour_to_sec(hour);
+				break;
+			}
+			case 3:{
+				std::cout<<"Set timer in minutes: ";
+				long int second{-1};
+				std::cin>>second;
+				return second;
+				break;
+			}
+			default:
+				std::cerr<<"\nInvalid choice\nPLease choose again\n";
+		}
+	}
+
 }
 
 long int set_alarm_time(int min, int start_time)

@@ -1,2 +1,3 @@
 # CLI-Timer
-A CLI timer developed in  C++
+A CLI timer developed in python
+
